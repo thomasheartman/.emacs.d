@@ -1,0 +1,3 @@
+[submodule "private/reason"]
+	path = private/reason
+	url = https://github.com/fredyr/reason
