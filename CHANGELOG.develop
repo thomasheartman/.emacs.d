@@ -2060,6 +2060,7 @@ Other:
     between errors.
   - ~SPC m p r~ to run project (thanks to Willian Ver Valem Paiva)
   - ~SPC r n~ for =eclim-java-new= (thanks to Dela Anthonio)
+<<<<<<< HEAD
   - New =lsp= backend keybindings
     - ~SPC m r c i~ convert to static import
     - ~SPC m r a t~ add throws exception
@@ -2096,6 +2097,23 @@ Other:
   - Fixed prefixes for =java-mode= and =gradle-mode= (thanks to Seong Yong-ju)
   - Enabled =lsp-java= when the =java-backend= is =nil= and the =lsp= layer is
     enabled (thanks to Ivan Yonchovski)
+=======
+- Replace usage of =ensime-print-type-at-point= by =ensime-type-at-point=
+  (thanks to Joao Azevedo)
+- Added defalias for =ensime-type-at-point= for compatibility (thanks to Eivind
+  Fonn)
+- Added ENSIME jump handlers (thanks to Joao Azevedo)
+- Improved maven and gradle support (thanks to Sylvain Benner)
+- Made java layer depend on groovy layer (thanks to Sylvain Benner)
+- Fixed syntax typo in configuration (thanks to EMayej)
+- Added =org-babel= support (thanks to Michael Rohleder)
+- Remove broken ENSIME key bindings (thanks to Bjarke Vad Andersen)
+- Fixed yanking types (thanks to Bjarke Vad Andersen)
+- Fixed gtags related initialization (thanks to Guido Kraemer)
+- Added LSP Java backend (thanks to Ivan Yonchovski)
+- Add =.dap-breakpoints= and =.lsp-session-*= (java lsp tempfiles) to .gitignore
+  (thanks to Uroš Perišić)
+>>>>>>> Add `.dap-breakpoints` and `.lsp-session-*` to .gitignore.
 **** Javascript
 - Improvements:
   - Leverage js-doc Yasnippet integration if available (thanks to Andriy Kmit')
