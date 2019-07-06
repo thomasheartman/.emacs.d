@@ -1,3 +1,6 @@
 [submodule "private/reason"]
 	path = private/reason
 	url = https://github.com/fredyr/reason
+[submodule "layers/exwm"]
+	path = layers/exwm
+	url = git@github.com:timor/spacemacsOS.git
