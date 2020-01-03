@@ -64,6 +64,7 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
 - Added support for =ripgrep=. To enable it add =rg= to
   =dotspacemacs-search-tools=. =ripgrep= key bindings are under ~SPC s r~
   prefix. (thanks to Aron Griffis)
+- Make =ripgrep= work properly with =ripgrep config files= (thanks to Jacek Swierk)
 - Simplify declaration of company backends, see the section
   =Add auto-completion in a layer= of the =README.org= file of the
   =auto-completion= layer.
@@ -71,6 +72,8 @@ the [[file:CHANGELOG.org][CHANGELOG.org]] file.
   =EXPERIMENTAL.org=. This allows for instant Spacemacs startup time with
   pre-loaded heavy packages like =Org= and =Helm=
   (thanks to Sylvain Benner, Compro Prasad and Keith Simmons)
+- Added support for native fill column indicator in Emacs 27+ (thanks to
+  Andriy Kmit)
 *** Breaking Changes
 **** Major
 - Support for Emacs 24 has been dropped, the minimal Emacs version is now
@@ -267,6 +270,7 @@ sane way, here is the complete list of changed key bindings
   - ~SPC m t d c~ for =spacemacs/org-trello-pull-card=
   - ~SPC m t u b~ for =spacemacs/org-trello-push-buffer=
   - ~SPC m t u c~ for =spacemacs/org-trello-push-card=
+- New keybinding for =org-table-field-info= ~SPC m t f~ (thanks to Dominik Schrempf)
 ***** Python
 - Key bindings (thanks to Danny Freeman):
   - Changed ~SPC m s F~ to ~SPC m e F~ for =lisp-eval-defun-and-go=
@@ -297,6 +301,8 @@ sane way, here is the complete list of changed key bindings
 ***** Vagrant
 - Key bindings:
   - Vagrant key bindings prefix is now ~SPC a V~.
+***** YAML
+- Added LSP support (thanks to Seong Yong-ju)
 ***** ycmd
 - The =ycmd= layer has been deleted and moved to the =c-c++= layer.
 *** New layers
@@ -376,6 +382,7 @@ sane way, here is the complete list of changed key bindings
 - node (thanks to jupl)
 - pass (thanks to Andrew Oppenlander, Kepi, Kalle Lindqvist, and Evan Klitzke)
 - prettier (thanks to Seong Yong-ju)
+- quickurl (thanks to Spenser "equwal" Truex)
 - sailfish-developer (thanks to Victor Polevoy)
 - sphinx (thanks to Wei-Wei Guo)
 - tern (thanks to Sylvain Benner and Juuso Valkeejärvi)
@@ -523,6 +530,11 @@ Other:
   - Use a unique variable for each transient state's full-hint toggle function
     so that toggling the full hint in one transient state does not affect other
     transient states (thanks to Miciah Dashiel Butler Masters)
+  - Converted obsolete =cl= to =cl-lib= (thanks to kimr)
+  - Removed uses of =lexical-let=, part of the deprecated =cl= package
+    (thanks to Spenser Truex)
+  - Converted =case= to =cl-case= to fix =cl-lib= related errors
+    (thanks to Nikita Leshenko)
 - Fixes:
   - Avoid non-idempotent use of push in init code (thanks to Miciah Masters)
   - Moved Spacemacs startup progress bar to =core-progress-bar.el=, removed
@@ -605,6 +617,8 @@ Other:
     variable comments in favor of the ASCII one (thanks to nshadov)
   - Fixed home buffer version insertion removing first line (thanks to duianto)
   - Fixed ~SPC TAB~ in =spacemacs-base= distribution (thanks to duianto)
+  - Frame title setting doesn't need to depend on environment (gui/cli)
+    (thanks to Mpho Jele)
 - Other:
   - New function =configuration-layer/message= to display message in
     =*Messages*= buffer (thanks to Sylvain Benner)
@@ -668,6 +682,13 @@ Other:
   - Added =symbol-overlay= to the =spacemacs-navigation= layer
     (thanks to kenkangxgwe)
 - Key bindings:
+  - New ~SPC a Q~ prefix for dispatching quickurl
+    (thanks to Spenser "equwal" Truex:)
+    - ~SPC a Q l~ List quickurls
+    - ~SPC a Q Q~ Expand quickurl abbrev at point
+    - ~SPC a Q i~ Ask for which quickurl to insert
+    - ~SPC a Q e~ Edit quickurls
+    - ~SPC a Q b~ Ask to browse some url from those stored (with completion).
   - New evil text objects =«=, =｢=, =‘= and =“=.
   - Improved buffer transient state with extra bindings and new commands:
     - Added ~<right>~ for next-buffer
@@ -1070,6 +1091,10 @@ Other:
                spacemacs/window-split-triple-columns
                spacemacs/window-split-grid)
     (thanks to Thanh Vuong)
+  - Updated the =spacemacs-layouts= layers readme to describe the variables:
+    - =spacemacs-layouts-restricted-functions=
+    - =spacemacs-layouts-restrict-spc-tab=
+    (thanks to John Stevenson)
   - Added a link to =spacemacs|create-align-repeat-x= in the docstring for
      =align-repeat-= commands (thanks to Troy Pracy)
   - Improved TS formatting: workspaces & layouts (thanks to duianto)
@@ -1084,6 +1109,8 @@ Other:
   - Hide =spacemacs//= command prefixes in which-key (thanks to duianto)
   - Prevented removal of =eldoc= info when switching to insert state
     (thanks to Ivan Yonchovski)
+  - Added a toggleable hint for the Scrolling Transient State (~SPC N~)
+    (thanks to Andriy Kmit)
 - Fixed:
   - Fixed ~h~ key binding in compilation and grep buffers
     (thanks to Sylvain Benner)
@@ -1211,6 +1238,7 @@ Other:
     (thanks to Brandon T. Willard)
   - Fixed canceling =spacemacs/ace-buffer-links= (thanks to duianto)
   - Required =ivy= to load =counsel-projectile= (thanks to Thanh Vuong)
+  - Remove obsolete custom location for =counsel-css= (thanks to Richard Kim)
   - Make =search-engine= layer support custom keywords for =engine-mode=
     (thanks to Maximilian Wolff)
   - Fixed =search-engine= layer customization issue (thanks to Haisheng Wu)
@@ -1225,6 +1253,7 @@ Other:
   - Fixed sudo-edit on TRAMP (thanks to Carlos Ibáñez)
   - Replaced obsolete function =doom-modeline-init= with =doom-modeline-mode=
     (thanks to duianto)
+  - Fixed searching in the =helm-find-file= actions (thanks to duianto)
 *** Layer changes and fixes
 **** Agda
 - Fixes
@@ -1300,6 +1329,8 @@ Other:
   - Fixed =lsp= support for =ccls= server (thanks to Alexander Dalshov)
   - Added automatic formatting on save using ClangFormat with the variables
     =c-c++-enable-clang-format-on-save= (thanks to Robbert van der Helm)
+  - Made =c-c++-enable-clang-format-on-save= work the first time a c++ file
+    is opened (thanks to AJ Bond)
   - Added possible value =no-completion= to =c-c++-enable-rtags-support= flag.
     This adds the option to opt-out of =company-rtags= while enabling Rtags.
   - Added option to use =google-c-style= with the variable
@@ -1487,6 +1518,7 @@ Other:
   - Enabled =flycheck= by default (thanks to Saulius Menkevičius)
   - No need to unset =omnisharp-auto-complete-want-documentation= anymore
    (thanks to Saulius Menkevičius)
+  - Add support for lsp server (thanks to Saulius Menkevičius)
   - Added ~SPC m t~ which key prefix: =csharp/tests= (thanks to duianto)
   - Hide mode-line indicator: =omnisharp= (thanks to duianto)
 - Key bindings:
@@ -1510,7 +1542,7 @@ Other:
   - Fixed =d-mode= flycheck imports on dub projects (thanks to Dietrich Daroch)
 **** Dart
 - Improvements:
-  - Added =LSP= support (thanks to Mathieu Post)
+  - Added =LSP= support (thanks to Mathieu Post and Takeshi Tsukamoto)
   - Added =Flutter= support (thanks to Mathieu Post)
 - Fixes:
   - Added =dart-server= package (thanks to duianto)
@@ -1604,8 +1636,8 @@ Other:
 - Added elixir-ls backend (thanks to mpanarin)
 - Added breakpoint toggle to alchemist binds (thanks to mpanarin)
   - Added ~SPC m d b~ to toggle IEx.pry breakpoint
-- lsp layer is a dependency when backend is set to 'lsp (thanks to mpanarin)
-- "C-j" indents line properly (thanks to mpanarin)
+- lsp layer is a dependency when backend is set to ='lsp= (thanks to mpanarin)
+- ~C-j~ indents line properly (thanks to mpanarin)
 - Enabled =evil-matchit= (thanks to Miloš Mošić)
 **** Elm
 - Fixed flycheck initialization (thanks to Kevin W. van Rooijen)
@@ -1648,6 +1680,9 @@ Other:
 - Conditionally enable ERC notifications via =erc-enable-notifications=
   (thanks to Evan Klitzke)
 - Added spell checking and mIRC colors (thanks to Benjamin Levy)
+- erc-view-log related changes (thanks to Mpho Jele)
+  - Modified erc-log transient state to open in erc-view-log-mode
+  - Added utility to open log buffer/file from erc channel
 **** ESS
 - Key bindings:
   - Change ~SPC m s t~ to ~SPC m s f~ to respect convention (thanks to Yi Liu)
@@ -1806,6 +1841,8 @@ Other:
     faster (thanks to Cosmin Cojocar)
   - Support editorconfig setting of =tab-width= to nil (thanks to lawrsp)
   - Added setup instructions for =gopls= (thanks to pancho horrillo)
+  - Make flycheck disable checkers covered by golangci (thanks to zhuoyikang)
+  - Updated build instructions for =golangci-lint= (thanks to pancho horrillo)
 - Key bindings
   - =godoctor= key bindings (thanks to TinySong and Eivind Fonn):
     - ~SPC m r n~ to rename
@@ -1929,13 +1966,13 @@ Other:
   - Unfolded org headings to a target line when a .org file is opened from
     Helm-ag (thanks to duianto and Miciah Masters)
   - Fixed searching in a project with ~C-s~ from ~SPC p p~ (thanks to duianto)
+  - Fixed ~C-c C-e~ =helm-find-files-edit= action (thanks to duianto)
 **** HTML
-- Added impatient-mode under ~SPC m i~ (thanks to geo7)
+- Added =impatient-mode= under ~SPC m i~ (thanks to geo7)
 - Added =counsel-css= as an =ivy= alternative to =helm-css-scss=
   (thanks to Robbert van der Helm)
 - Fixed autoloading bug involving =spacemacs/helm-find-files=
   (thanks to Jack Kamm)
-- Added impatient-mode under ~SPC m i~ (thanks to geo7)
 - XML files now open with web-mode by default (thanks to Jordan Gwyn)
 - Added =helm-xref= (thanks to Fangrui Song and Sylvain Benner)
 - Removed ~TAB~ binding for emacs editing style in =emmet-mode=
@@ -1979,8 +2016,11 @@ Other:
 - Added =recentf= alt actions to refresh and delete items (thanks to Rich Alesi)
 - Added =projectile= alternate actions to invalidate cache (thanks to Rich Alesi)
 - Key bindings:
-  - Added Helm key bindings counterparts: ~SPC f e l~ and ~SPC h i~
-    (thanks to Andriy Kmit')
+  - Added Helm key binding counterparts:
+    - ~SPC f e l~ =counsel-find-library=
+    - ~SPC h i~   =counsel-info-lookup-symbol=
+      (thanks to Andriy Kmit')
+    - ~SPC h m~ =man=, fallback to =woman= on Widows (thanks to madand)
   - Added ~SPC h d F~ to list faces (thanks to Muneeb Shaikh)
   - Bind =find-file-other-window= to ~j~ (thanks to James Wang)
   - Added =counsel-mark-ring= to ~rm~ (thanks to bmag)
@@ -2039,6 +2079,8 @@ Other:
 - Fixed void variable =counsel-find-file-map= (thanks to duianto)
 - Fixed wrong initial directory in =spacemacs/counsel-search=
   (thanks to Carlos Ibáñez and Juuso Valkeejärvi)
+- Fix visual selection expansion across the buffer on `SPC s S` and `SPC s B`
+  (thanks to Andriy Kmit)
 **** Imenu-list
 - Changed ~SPC b i~ to ~SPC b t~ for =imenu= tree view
   (thansk to Sylvain Benner)
@@ -2060,7 +2102,6 @@ Other:
     between errors.
   - ~SPC m p r~ to run project (thanks to Willian Ver Valem Paiva)
   - ~SPC r n~ for =eclim-java-new= (thanks to Dela Anthonio)
-<<<<<<< HEAD
   - New =lsp= backend keybindings
     - ~SPC m r c i~ convert to static import
     - ~SPC m r a t~ add throws exception
@@ -2097,23 +2138,6 @@ Other:
   - Fixed prefixes for =java-mode= and =gradle-mode= (thanks to Seong Yong-ju)
   - Enabled =lsp-java= when the =java-backend= is =nil= and the =lsp= layer is
     enabled (thanks to Ivan Yonchovski)
-=======
-- Replace usage of =ensime-print-type-at-point= by =ensime-type-at-point=
-  (thanks to Joao Azevedo)
-- Added defalias for =ensime-type-at-point= for compatibility (thanks to Eivind
-  Fonn)
-- Added ENSIME jump handlers (thanks to Joao Azevedo)
-- Improved maven and gradle support (thanks to Sylvain Benner)
-- Made java layer depend on groovy layer (thanks to Sylvain Benner)
-- Fixed syntax typo in configuration (thanks to EMayej)
-- Added =org-babel= support (thanks to Michael Rohleder)
-- Remove broken ENSIME key bindings (thanks to Bjarke Vad Andersen)
-- Fixed yanking types (thanks to Bjarke Vad Andersen)
-- Fixed gtags related initialization (thanks to Guido Kraemer)
-- Added LSP Java backend (thanks to Ivan Yonchovski)
-- Add =.dap-breakpoints= and =.lsp-session-*= (java lsp tempfiles) to .gitignore
-  (thanks to Uroš Perišić)
->>>>>>> Add `.dap-breakpoints` and `.lsp-session-*` to .gitignore.
 **** Javascript
 - Improvements:
   - Leverage js-doc Yasnippet integration if available (thanks to Andriy Kmit')
@@ -2174,6 +2198,7 @@ Other:
 - Improved support for workman keyboard layout (thanks to Benjamin Reynolds)
 - Added =after-config= hooks for lazy-loaded packages (thanks to CharlesHD)
 - Added undo-tree visualizer mapping (thanks to CharlesHD)
+- Fixed key remapping after =cl= package deprecation (thanks to Damien Picard)
 **** Kivy
 - Added the =kivy= package (thanks to Nasser Alshammari and Ryota Kayanuma)
 **** LaTeX
@@ -2189,6 +2214,7 @@ Other:
   - ~SPC m n~ goto next error
   - ~SPC m N~ goto previous error
     (thanks to Olivier Verdier)
+- Fixed README to say auto-fill on by default. (thanks to Max Willsey)
 **** Lua
 - Added support for auto-completion with =company= (thanks to halfcrazy)
 - Added support for =LSP= (EmmyLua-LS-all) (thanks to Lin.Sun)
@@ -2306,6 +2332,7 @@ Other:
 - Refactor major-mode leader key bindings (thanks to Miciah Masters)
 - Enabled scrolling in =mu4e= (thanks to Simon Altschuler)
 - Kill mu4e layout on app exit (thanks to Ag Ibragimov)
+- Restore ~gu~ binding for ~mu4e-view-go-to-url~ (thanks to Dominik Schrempf)
 **** Multiple Cursors
 - Disabled Spacemacs paste transient state when pasting to avoid pasting issue
   when there are more than one cursor (thanks to braham-snyder)
@@ -2364,7 +2391,7 @@ Other:
 - Try harder to find GitHub patch URL (thanks to Miciah Masters)
 - Open GitHub patches fullscreen
 - Add next and previous message bindings to notmuch-tree mode
-- Change the C-n and C-p message bindings to their original N and P bindings
+- Change the ~C-n~ and ~C-p~ message keys to their original ~N~ and ~P~ bindings
 **** OCaml
 - Allow initialization without requiring =opam= (thanks to Bernhard Schommer)
 - Fixed misused functions, =merlin= is a package not a layer
@@ -2471,6 +2498,7 @@ Other:
     - Added ~SPC m s a~ to toggle archive tag for subtree
     - Added ~SPC m s A~ to archive subtree (previously ~SPC m s a~)
   - Added ~SPC m i L~ as =org-cliplink= into =org= layer (thanks to bb2020)
+  - Added ~SPC m e s~ =org-mime-org-subtree-htmlize= (thanks to Nick Anderson)
   - Documented more insertion bindings (thanks to Lorenzo Manacorda):
     - ~C-RET~   Insert heading at end of current subtree
     - ~C-S-RET~ Insert TODO heading at end of current subtree
@@ -2515,6 +2543,8 @@ Other:
 - Added support for CUSTOM_ID in latex exports (thanks to Compro-Prasad)
 - Added =ox-jira= as org export backend (thanks to Sebastian Nagel)
 - Added =helm-org= package (thanks to Simon Pintarelli)
+- Fixed evil-normal-state ~ESC~ after exiting =org-present-mode=
+  (thanks to duianto)
 **** Osx
 - Fixed OSX mapping issue (thanks to Joey Liu)
 - Added layer variables to customize modifier behaviors on macOS:
@@ -2538,6 +2568,7 @@ Other:
   =hyper=, =super= or =alt= (thanks to Binbin Ye)
 - Added a layer variable =osx-swap-option-and-command= defaults to =nil=
   (thanks to Binbin Ye)
+- Use standard init function for ~exec-path-from-shell~ (thanks to Christopher Eames)
 **** Pandoc
 - Fixed =spacemacs/run-pandoc= not to reset =pandoc--local-settings=
   (thanks to martian-f)
@@ -2656,6 +2687,7 @@ Other:
 - Fix lazy loading of =lsp-python-ms= (thanks to lsp-ableton)
 - Fix =Ipython= path on windows (thanks to Daniel K)
 - Make =inferior-python-mode= do not use tabs (thanks to tsoernes)
+- Automatic use the =lsp= as =python-formater= when =lsp= is enabled (thanks sunlin7)
 **** Racket
 - Restore smart closing paren behavior in racket-mode (thanks to Don March)
 - Updated racket logo (thanks to Vityou)
@@ -2734,10 +2766,10 @@ Other:
 - Highlight debugger keywords (thanks to Alexander Berezovsky and Eivind Fonn)
 - Adding ruby-refactor package (thanks to Daniel Luna)
   - Key bindings:
-    - Added ~SPC m r R m~ for extract to method.
-    - Added ~SPC m r R v~ to extract local variable.
-    - Added ~SPC m r R c~ to extract constant.
-    - Added ~SPC m r R l~ to extract to =let=.
+    - Added ~SPC m r e m~ for extract to method.
+    - Added ~SPC m r e v~ to extract local variable.
+    - Added ~SPC m r e c~ to extract constant.
+    - Added ~SPC m r e l~ to extract to =let=.
 - Added ~SPC m x h~ to toggle between old and new hash syntax in the active
   region (thanks to Paweł Siudak)
 - Added gtags to =enh-ruby-mode= as well as =ruby-mode=
@@ -2762,11 +2794,11 @@ Other:
 - Added the =seeing-is-believing= package (thanks to Brandon Conway)
 - Added prefixes for ruby major mode keybindings (thanks to Seong Yong-ju)
 - Added =lsp= and =dap= support (thanks to Billy Kaplan)
-<<<<<<< HEAD
 - Fixed lazy loading of =ruby-test-mode= (thanks to Michael Franz Aigner)
 - Removed stray =test.rb= file (thanks to Michael Hauser-Raspe)
-=======
->>>>>>> Adding Ruby LSP Backend and DAP support
+- Added missing key bindings for =counsel-gtags= in =enh=ruby-mode= (thanks to Seong Yong-ju)
+- Added =dap= support for =enh-ruby-mode= (thanks to Seong Yong-ju)
+- Added missing prefix =seeing-is-believing= for ~SPC m @~ (thanks to Seong Yong-ju)
 **** Ruby on Rails
 - Changed leader keys to be configured for the =projectile-rails-mode= minor
   mode instead of =ruby-mode= and =enh-ruby-mode= so that the key bindings will
@@ -2792,6 +2824,10 @@ Other:
 - Added rust lsp completion with company and bindings (thanks to Justin)
 - Added debugger integration via =dap= layer
 - Fixed rust dap integration (thanks to Tommi Komulainen)
+- Make ~rustup~ call shell agnostic (thanks to Dietrich Daroch)
+- Fixed ~rust-quick-run~ command (thanks to Grant Shangreaux)
+- Removed compilation buffer string match on =rust-quick-run=
+  (thanks to Grant Shangreaux)
 **** Sailfish-Developer
 - Key bindings:
   - Added =sailfish-scratchbox= key bindings (thanks to Victor Polevoy):
@@ -2842,6 +2878,7 @@ Other:
   - Prevent ~C-l~ clearing cycle
   - Prevent ~clear RET~ inserting a page of white-space
   - Prevent duplicate insert lines from ~clear RET~
+- Make =eshell auto jump= more intelligent (thanks to Kalle Lindqvist)
 - Require company in =eshell-switch-company-frontend=
   (thanks to Benjamin Reynolds)
 - Fixed docs for "Fish shell and ansi-term" and explicitly enable
@@ -3103,6 +3140,7 @@ Other:
   - =browse-at-remote= which replaces =github-browse-file=
   (thanks Eugene Yaremenko)
 - Avoid loading all the diff packages (thanks to Sylvain Benner)
+- Avoided installing unused diff packages (thanks to Andriy Kmit)
 - Fixed error on =diff-hl-margin-mode= function being nil during startup
   (thanks to Voleking)
 **** Vue
@@ -3117,6 +3155,7 @@ Other:
 - Improvements:
   - Updated docs to include the =yaml-yamllint= flycheck checker
     (thanks to Nam Nguyen)
+  - Add support for lsp server (thanks to Seong Yong-ju)
 **** Ycmd
 - Search for =compile_commands.json= in build sub-directory
   (thanks to Amos Bird and Eivind Fonn)
@@ -3131,12 +3170,12 @@ Other:
 *** Various improvements
 - Lots of improvement with CI and documentation exporting
   (thanks to Eugene Yaremenko)
-- New LAYERS.org format (thanks to Eugene Yaremenko && Anton Latukha)
-- Various code and style improvements (thanks to bmag, duianto, Enze Chi, Eivind
-  Fonn, Eugene Yaremenko, Fabien Dubosson, Kalle Lindqvist, Boris Buliga, timor,
-  yuhan0, thanhvg, Sylvain Benner)
-- Multiple unit test improvements (thanks to Sylvain Benner, et2010 and
-  Codruț Constantin Gușoi)
+- New LAYERS.org format (thanks to Anton Latukha && Eugene Yaremenko)
+- Various code and style improvements (thanks to bmag, Boris Buliga, duianto,
+  Enze Chi, Eivind Fonn, Eugene Yaremenko, Fabien Dubosson, Kalle Lindqvist,
+  Sylvain Benner, thanhvg, timor, yuhan0)
+- Multiple unit test improvements (thanks to Codruț Constantin Gușoi, et2010 and
+  Sylvain Benner)
 - Various documentation improvements (thanks Aaron Jensen, Aaron Peckham, Aaron
   Renner, Adam Frey, Adam Kruszewski, ahanwadi, Aleksandr Argunov, Alexander
   Dalshov, Alexander Eberspächer, Alexander Iljin, Alexander Kjeldaas,
@@ -3151,33 +3190,34 @@ Other:
   Dominik Schrempf, Doug Beardsley, dubnde, duianto, eldios, EMayej, Eugene
   Yaremenko, Evan Klitzke, Evan Niessen-Derry, firemiles, Florian Bruhin, Fuqiao
   Xue, Gabriel Arrillaga, Garrett Johnson, Grant Shangreaux, Guido Kraemer,
-  Henrique Jung, Henry Hirsch, Henry Marshall, hornuda, Hong Xu, Ivan Fedorov,
-  Ivan Kryvoruchko, J. Patrick Lanigan, Jaremy Creechley, Jason Axelson, Jesse
-  Cooke, Jethro Shuwen Sun, JI Xiang, Jim Deville, Jody Frankowski, Joe
-  Hillenbrand, John Eismeier, John Wood, Jon Tippens, Jonas Strømsodd, Jonathan
-  Arnett, Jonathan Chen, Jonathan Gillett, Josh Greenwood, Joshua Santos, Justin
-  Stone, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai, Keith Simmons, Keith
-  Wygant, Kenji Miyazaki ,Kevin Ji, Kristoffer Haugsbakk, lawrsp, Leo Joseph
-  Buchignani III, liuchong, Lucius Hu, Luke Winship, Luke Worth, Marco Ieni,
-  Marco Zucconelli, Max Beutelspacher, Max Deineko, Max Nordlund, Maximilian
-  Wolff, Miciah Dashiel Butler Masters, mjkramer, Mikhail Yakutovich, Miloš
-  Mošić, milserk, Muneeb Shaikh, Nasser Alshammari, Niko Felger, Nikolai
-  Myllymäki, nikolaiam, Nicolas Forgerit, Oguz Serbetci, Olivier Verdier, Pancho
-  Horrillo, Paul Milla, Paulo Schneider, Pawan Dubey, Paweł Siudak, Phil
-  Pirozhkov, Philippe Bourdages, Piotr Grzesik, Rafi Khan, Rand01ph, rakyi,
-  Raymond Wanyoike, Reverend Homer, Robby O'Connor, Rhommel Lamas, Sam Pablo
-  Kuper, Saulius Menkevičius, sduthil, Sergio Ugalde, Shane Kilkelly, Sid Kapur,
-  Som Poddar, Somelauw, Soobin Rho, sorawee, SteveJobzniak, Sunghyun Hwang,
-  Swaroop C H, Sylvain Benner, Szunti, Thijs Vermeir, Tianyi Wang, Tim Stewart,
-  timor, TinySong, Titov Andrey, Thomas de Beauchêne, Tomasz Cichocinski, Trey
-  Merkley, tzhao11, Vincent Taing, Vlad Bokov, Vladimir Kochnev, wenpin, Wieland
-  Hoffmann, Witoslaw Koczewski, Xiang Ji, Yi Liu, Zane Sterling, zer09, Zhige
-  Xin, Serghei Iakovlev)
+  Henrique Jung, Henry Hirsch, Henry Marshall, hornuda, Hong Xu, Ilia Kurenkov,
+  Ivan Fedorov, Ivan Kryvoruchko, J. Patrick Lanigan, Jaremy Creechley, Jason
+  Axelson, Jesse Cooke, Jethro Shuwen Sun, JI Xiang, Jim Deville, Jody
+  Frankowski, Joe Hillenbrand, John Eismeier, John Wood, Jon Tippens, Jonas
+  Strømsodd, Jonathan Arnett, Jonathan Chen, Jonathan Gillett, Josh Greenwood,
+  Joshua Santos, Justin Stone, Kainalu Hagiwara, Kalle Lindqvist, Kechao Cai,
+  Keith Simmons, Keith Wygant, Kenji Miyazaki ,Kevin Ji, Kristoffer Haugsbakk,
+  lawrsp, Leo Joseph Buchignani III, liuchong, Lucius Hu, Luke Winship, Luke
+  Worth, Marco Ieni, Marco Zucconelli, Max Beutelspacher, Max Deineko, Max
+  Nordlund, Maximilian Wolff, Miciah Dashiel Butler Masters, mjkramer, Mikhail
+  Yakutovich, Miloš Mošić, milserk, Muneeb Shaikh, Nasser Alshammari, Niko
+  Felger, Nikolai Myllymäki, nikolaiam, Nicolas Forgerit, Oguz Serbetci, Olivier
+  Verdier, Pancho Horrillo, Paul Milla, Paulo Schneider, Pawan Dubey, Paweł
+  Siudak, Phil Pirozhkov, Philippe Bourdages, Piotr Grzesik, Rafi Khan,
+  Rand01ph, rakyi, Raymond Wanyoike, Reverend Homer, Robby O'Connor, Rhommel
+  Lamas, Sam Pablo Kuper, Saulius Menkevičius, sduthil, Serghei Iakovlev, Sergio
+  Ugalde, Shane Kilkelly, Sid Kapur, Som Poddar, Somelauw, Soobin Rho, sorawee,
+  SteveJobzniak, Sunghyun Hwang, Swaroop C H, Sylvain Benner, Szunti, Thijs
+  Vermeir, Tianyi Wang, Tim Stewart, timor, TinySong, Titov Andrey, Thomas de
+  Beauchêne, Tomasz Cichocinski, Trey Merkley, tzhao11, Vincent Taing, Vlad
+  Bokov, Vladimir Kochnev, wenpin, Wieland Hoffmann, Witoslaw Koczewski, Xiang
+  Ji, Yi Liu, Zane Sterling, zer09, Zhige Xin)
 **** Documentation and website
-  - Updated DOCUMENTATION.org to fix the example for how to change the separator style
+  - DOCUMENTATION.org:
+    - Fixed the example for how to change the separator style
   - README.md:
     - Fixed macOS documentation to install fonts (thanks to Sergio Morales)
 *** Release notes summarized
-  Thanks to: Grant Shangreaux, Songpeng Zu, Igor Almeida, Miciah Dashiel Butler
-  Masters, Abhishek(Compro) Prasad, Deepak Khidia, Ward Harris, Jiahao Jiang,
-  Enze Chi
+  Thanks to: Abhishek(Compro) Prasad, Deepak Khidia, Enze Chi, Grant Shangreaux,
+  Igor Almeida, Jiahao Jiang, Miciah Dashiel Butler Masters, Songpeng Zu, Ward
+  Harris

@@ -1,6 +1,6 @@
 #+TITLE: kubernetes layer
 
-#+TAGS: layer|uncategorized
+#+TAGS: layer|os
 
 [[file:./img/kubernetes.png]]
 

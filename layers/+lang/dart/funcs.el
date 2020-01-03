@@ -9,20 +9,10 @@
 ;;
 ;;; License: GPLv3
 
-(defun spacemacs//dart-setup-company-lsp ()
-  "Setup lsp auto-completion"
-  (if (configuration-layer/layer-used-p 'lsp)
-      (progn
-        (spacemacs|add-company-backends
-          :backends company-lsp
-          :modes dart-mode
-          :append-hooks nil
-          :call-hooks t)
-        (company-mode))
-    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
+
+;; backend
 
-(defun spacemacs//dart-setup-backend-lsp ()
-  "Setup lsp backend"
-  (if (configuration-layer/layer-used-p 'lsp)
-      (lsp)
-    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
+(defun spacemacs//dart-setup-backend ()
+  (pcase dart-backend
+    (`analyzer (dart-server))
+    (`lsp (lsp))))

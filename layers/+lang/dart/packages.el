@@ -1,6 +1,6 @@
 ;;; packages.el --- dart layer packages file for Spacemacs.
 ;;
-;; Copyright (c) 2012-2018 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2019 Sylvain Benner & Contributors
 ;;
 ;; Author: Bruno Tavares <connect+spacemacs@bltavares.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -9,14 +9,11 @@
 ;;
 ;;; License: GPLv3
 
-;;; Code:
-
 (defconst dart-packages
   '(
     dart-mode
-    dart-server
-    company
-    flutter
+    (dart-server :toggle (eq dart-backend 'analyzer))
+    (flutter (eq dart-backend 'analyzer))
     flycheck
     ))
 
@@ -31,12 +28,12 @@
     :mode "\\.dart\\'"
     :init
     (add-hook 'dart-mode-local-vars-hook
-              #'spacemacs//dart-setup-backend-lsp)))
+              #'spacemacs//dart-setup-backend)))
 
 (defun dart/init-dart-server ()
   (use-package dart-server
-    :after dart-mode
-    :init
+    :defer t
+    :config
     (progn
       (spacemacs/declare-prefix-for-mode 'dart-mode "mf" "find")
       (spacemacs/declare-prefix-for-mode 'dart-mode "mh" "help")
@@ -72,16 +69,11 @@
   (use-package flutter
     :defer t
     :after dart-mode
-    :init
+    :config
     (progn
       (spacemacs/declare-prefix-for-mode 'dart-mode "mx" "flutter")
       (spacemacs/set-leader-keys-for-major-mode 'dart-mode
         "xx" 'flutter-run-or-hot-reload))))
 
-(defun dart/post-init-company ()
-  (add-hook 'dart-mode-local-vars-hook #'spacemacs//dart-setup-company-lsp))
-
 (defun dart/post-init-flycheck ()
   (spacemacs/enable-flycheck 'dart-mode))
-
-;;; packages.el ends here

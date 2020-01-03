@@ -10,5 +10,8 @@
 ;;; License: GPLv3
 
 ;; Variables
-
 (spacemacs|define-jump-handlers dart-mode)
+
+(defvar dart-backend 'lsp
+  "The backend to use for IDE features.
+Possible values are `analyzer' and `lsp'.")

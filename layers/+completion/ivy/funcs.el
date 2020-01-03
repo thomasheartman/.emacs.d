@@ -1,4 +1,4 @@
-;;; funcs.el --- Ivy Layer functions File for Spacemacs
+;;; funcs.el --- Ivy Layer functions File for Spacemacs -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2012-2019 Sylvain Benner & Contributors
 ;;
@@ -67,8 +67,7 @@
 
 ;; see `counsel-ag-function'
 (defun spacemacs//make-counsel-search-function (tool)
-  (lexical-let ((base-cmd
-                 (cdr (assoc-string tool spacemacs--counsel-commands))))
+  (let ((base-cmd (cdr (assoc-string tool spacemacs--counsel-commands))))
     (lambda (string &optional _pred &rest _unused)
       "Grep in the current directory for STRING."
       ;; `ivy-more-chars' returns non-nil when more chars are needed,
@@ -338,7 +337,7 @@ To prevent this error we just wrap `describe-mode' to defeat the
           (user-error "C-c C-c can do nothing useful at this location"))
     (let* ((context (org-element-context))
            (type (org-element-type context)))
-      (case type
+      (cl-case type
         ;; When at a link, act according to the parent instead.
         (link (setq context (org-element-property :parent context))
               (setq type (org-element-type context)))
@@ -360,7 +359,7 @@ To prevent this error we just wrap `describe-mode' to defeat the
             (setq context parent type 'item))))
 
       ;; Act according to type of element or object at point.
-      (case type
+      (cl-case type
         ((headline inlinetask)
          (save-excursion (goto-char (org-element-property :begin context))
                          (call-interactively 'counsel-org-tag)) t)))))
@@ -377,7 +376,7 @@ To prevent this error we just wrap `describe-mode' to defeat the
 ;; Ivy
 
 (defun spacemacs//ivy-command-not-implemented-yet (key)
-  (lexical-let ((-key key))
+  (let ((-key key))
     (spacemacs/set-leader-keys
       -key (lambda ()
              (interactive)
@@ -466,22 +465,27 @@ Closing doesn't kill buffers inside the layout while killing layouts does."
 
 ;; Swiper
 
+(defun spacemacs//counsel-current-region-or-symbol ()
+  "Return contents of the region or symbol at point.
+
+If region is active, mark will be deactivated in order to prevent region
+expansion when jumping around the buffer with counsel. See `deactivate-mark'."
+  (if (region-active-p)
+      (prog1
+          (buffer-substring-no-properties (region-beginning) (region-end))
+        (deactivate-mark))
+    (thing-at-point 'symbol t)))
+
 (defun spacemacs/swiper-region-or-symbol ()
   "Run `swiper' with the selected region or the symbol
 around point as the initial input."
   (interactive)
-  (let ((input (if (region-active-p)
-                   (buffer-substring-no-properties
-                    (region-beginning) (region-end))
-                 (thing-at-point 'symbol t))))
+  (let ((input (spacemacs//counsel-current-region-or-symbol)))
     (swiper input)))
 
 (defun spacemacs/swiper-all-region-or-symbol ()
   "Run `swiper-all' with the selected region or the symbol
 around point as the initial input."
   (interactive)
-  (let ((input (if (region-active-p)
-                   (buffer-substring-no-properties
-                    (region-beginning) (region-end))
-                 (thing-at-point 'symbol t))))
+  (let ((input (spacemacs//counsel-current-region-or-symbol)))
     (swiper-all input)))

@@ -203,7 +203,7 @@ In the files header, change the default author name (=Sylvain Benner=) to your
 name.
 
 **** README.org tags
-Every README.org file of a layer should contain =#+TAGS:= line:
+Every README.org file of a layer should have =#+TAGS:= line:
 
 #+BEGIN_EXAMPLE
   #+TITLE: My layer
@@ -214,9 +214,9 @@ Every README.org file of a layer should contain =#+TAGS:= line:
   ...
 #+END_EXAMPLE
 
-Individual tags are separated with "|" char.
-Example above contains 2 tags: "layer" and "web service"
-Tags are listed in =<spacemacs_root>/.ci/spacedoc-cfg.edn=
+Individual tags are separated with "|" character.
+Example above has 2 tags: "layer" and "web service".
+Tags are listed in [[https://github.com/syl20bnr/spacemacs/blob/develop/.ci/spacedoc-cfg.edn][<spacemacs_root>/.ci/spacedoc-cfg.edn]] configuration file.
 
 #+BEGIN_SRC clojure
   :spacetools.spacedoc.config/valid-tags
@@ -227,12 +227,31 @@ Tags are listed in =<spacemacs_root>/.ci/spacedoc-cfg.edn=
    "completion" "Completion"}
 #+END_SRC
 
-Labels are used to name headlines in =LAYERS.org= file and
-=:spacetools.spacedoc.config/layers-org-query= defines its structure by
+Labels are used to name headlines in [[https://github.com/syl20bnr/spacemacs/blob/develop/layers/LAYERS.org][LAYERS.org]] file and
+[[https://github.com/syl20bnr/spacemacs/blob/develop/.ci/spacedoc-cfg.edn][:spacetools.spacedoc.config/layers-org-query]] defines structure of the file by
 chaining tags into a tree where every leaf turns into a list of
-descriptions pulled out of README.org files that match leaf's path in the tree.
-"layer" is implicit root tag of the tree and every description can be displayed
-only once.
+descriptions pulled out of README.org files which tags match leaf's path in the tree.
+You can see how the shape of [[https://github.com/syl20bnr/spacemacs/blob/develop/.ci/spacedoc-cfg.edn][<spacemacs_root>/.ci/spacedoc-cfg.edn]]
+repeats in [[https://github.com/syl20bnr/spacemacs/blob/develop/layers/LAYERS.org#table-of-contents][TOC of LAYERS.org]].
+
+Important details:
+- Every layer description will be displayed exacly one time.
+- In the case when a README.org file of a layer doesn't have =#+TAGS:=
+  documentation formatting tool will inster dummy tags =layer|uncategorized=,
+  such files will be listed in [[https://github.com/syl20bnr/spacemacs/blob/develop/layers/LAYERS.org#readmeorg-files-that-need-proper-tags][LAYERS.org#readmeorg-files-that-need-proper-tags]].
+- Files which tag set has not being matched by [[https://github.com/syl20bnr/spacemacs/blob/develop/.ci/spacedoc-cfg.edn][:spacetools.spacedoc.config/layers-org-query]]
+  will appire in [[https://github.com/syl20bnr/spacemacs/blob/develop/layers/LAYERS.org#skipped-layers][LAYERS.org#skipped-layers]]
+- If [[https://github.com/syl20bnr/spacemacs/blob/develop/layers/LAYERS.org][LAYERS.org]] file has =Skipped layers:= and/or
+  =README.org files that need proper tags= sections - someone is slacking :wink:
+
+If you want to experiment with the tool locally:
+
+#+BEGIN_SRC shell
+  docker run --rm \
+    -v <SPACEMACS_REPO_ROOT>:/tmp/docs \
+    -v <PATH_TO_CONFIG_FILE>:/opt/spacetools/spacedoc-cfg.edn \
+    jare/spacetools docfmt /tmp/docs/
+#+END_SRC
 
 *** Contributor to an existing layer
 If you are contributing to an already existing layer, you should not modify any
