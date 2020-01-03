@@ -46,9 +46,6 @@
         (setq server-socket-dir dotspacemacs-server-socket-dir))
       (unless (server-running-p)
         (message "Starting a server...")
-<<<<<<< HEAD
-        (server-start)))))
-=======
         (server-start)))
     (spacemacs|when-dumping-strict
       (setq load-path-backup load-path)
@@ -57,4 +54,3 @@
       (setq spacemacs-dump-mode 'dumped)
       (garbage-collect))))
 (put 'narrow-to-page 'disabled nil)
->>>>>>> enables narrow-to-page
