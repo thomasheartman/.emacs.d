@@ -10,6 +10,11 @@
              ("p" "Post" entry (file+headline "~/projects/blog/notes.org" "Posts")
               "* IDEA %^{header}\n%U%i\n%?" :empty-lines 1)))
    #+end_src
+** Key bindings
+   A lot of Spacemacs' key bindings are really helpful, but in Org mode, I want ~C-c C-w~ to be used for org-refile, and not for window management.
+   #+begin_src emacs-lisp
+     (evil-define-key '(hybrid visual normal insert) org-mode-map (kbd "C-c C-w") 'org-refile)
+   #+end_src
 ** Org journal
    I use [[https://github.com/bastibe/org-journal][org-journal]] for keeping track of what I do during my days (primarily for work). It's mostly used in conjunction with org-capture, so we'll also set up the capture template for that.
 
