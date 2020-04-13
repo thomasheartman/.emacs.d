@@ -85,11 +85,85 @@
                                                    "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
    #+end_src
 ** Getting Things Done (GTD)
-   Because I am working on implementing the GTD methodology, I want to configure org mode to work with this as easily as possible.
+   Because I am working on implementing the GTD methodology, I want to configure org mode to work with this as easily as possible. This section is based heavily on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][this blog post]] by Nicolas Petton over at [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Emacs Café]].
 
 *** Capture templates
+    Configure capture templates to use for adding new entries to the inbox.
     #+begin_src emacs-lisp
       (add-to-list 'org-capture-templates
                    '("i" "Inbox (GTD)" entry (file "~/gtd/inbox.org")
-                     "* %^{title}\n  :LOGBOOK:\n  - Created %U%i\n  :END:\n  %?"))
+                     "* %^{title}\n  :LOGBOOK:\n  - Created %U\n  :END:\n  %i%?"  :empty-lines 1))
+      (add-to-list 'org-capture-templates
+                   '("p" "Project (GTD)" entry (file+headline "~/gtd/main.org" "Tasks")
+                     "* %^{title} [/]\n  :LOGBOOK:\n  - Created %U\n  :END:\n  %i%?"  :empty-lines 1))
+    #+end_src
+
+*** Refile targets
+    Configure refile targets for when moving items from the inbox to their correct positions
+    #+begin_src emacs-lisp
+      (setq org-refile-targets '(("~/gtd/main.org" :maxlevel . 3)
+                                 ("~/gtd/someday-maybe.org" :level . 1)
+                                 ("~/gtd/tickler.org" :maxlevel . 2)))
+    #+end_src
+
+*** Agenda files
+    We only want to show agenda items from the GTD files where actual items lie, so there's no some day / maybe list included.
+    #+begin_src emacs-lisp
+      (setq org-agenda-files '("~/gtd/inbox.org"
+                               "~/gtd/main.org"
+                               "~/gtd/tickler.org"))
+    #+end_src
+
+*** Tags
+    I want to set up set of common tags. We'll define a group of mutually exclusive tags (prefixed with an '@') for /context/, and another set of tags for categories.
+    #+begin_src emacs-lisp
+      (setq org-tag-alist '((:startgroup)
+                            ("@errand" . ?e)
+                            ("@office" . ?o)
+                            ("@home" . ?h)
+                            ("@computer" . ?c)
+                            ("@phone" . ?9)
+                            (:endgroup)
+                            (:newline)
+                            (:startgroup)
+                            ("fitness" . ?f)
+                            (:grouptags)
+                            (:startgroup)
+                            ("LesMills" . ?l)
+                            (:grouptags)
+                            ("SHBAM" . ?S)
+                            ("BODYATTACK" . ?A)
+                            ("BODYCOMBAT" . ?C)
+                            ("BODYPUMP" .?P)
+                            (:endgroup)
+                            (:endgroup)
+                            (:startgroup)
+                            ("website" . ?s)
+                            (:grouptags)
+                            ("blog" . ?b)
+                            (:endgroup)
+                            ("work" . ?w)
+                            (:startgroup)
+                            ("home" . ?H)
+                            (:grouptags)
+                            ("clothing")
+                            (:endgroup)
+                            ("finance" . ?F)
+                            ("personal" . ?p)
+                            ("design" . ?D)
+                            ("review" . ?r)
+                            (:startgrouptag)
+                            ("dev" . ?d)
+                            (:grouptags)
+                            ("kubernetes" . ?8)
+                            ("language" . ?L)
+                            (:endgrouptag)
+                            ("GTD" . ?g)
+                            ("productivity")))
+    #+end_src
+
+    I also want to enable setting tags with a single press and without a pop-up menu:
+    #+begin_src emacs-lisp
+      (setq org-use-fast-tag-selection t)
+      (setq org-fast-tag-selection-single-key t)
     #+end_src
