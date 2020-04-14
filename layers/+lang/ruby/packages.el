@@ -54,12 +54,6 @@
               "bx" 'bundle-exec
               "bo" 'bundle-open))))
 
-<<<<<<< HEAD
-=======
-(defun ruby/post-init-company ()
-  (add-hook 'ruby-mode-local-vars-hook #'spacemacs//ruby-setup-company))
-
->>>>>>> Adding Ruby LSP Backend and DAP support
 (defun ruby/init-chruby ()
   (use-package chruby
     :if (equal ruby-version-manager 'chruby)
@@ -256,7 +250,6 @@
                 "Rd" 'rubocop-check-directory
                 "RD" 'rubocop-autocorrect-directory
                 "Rf" 'rubocop-check-current-file
-<<<<<<< HEAD
                 "Rp" 'rubocop-check-project
                 "RP" 'rubocop-autocorrect-project))))
 
@@ -279,11 +272,6 @@
     (dolist (mode '(ruby-mode enh-ruby-mode))
       (spacemacs/set-leader-keys-for-major-mode mode
         "xh" 'ruby-hash-syntax-toggle))))
-=======
-                "RF" 'rubocop-autocorrect-current-file
-                "Rp" 'rubocop-check-project
-                "RP" 'rubocop-autocorrect-project))))
->>>>>>> Adding Ruby LSP Backend and DAP support
 
 (defun ruby/init-ruby-mode ()
   (use-package ruby-mode

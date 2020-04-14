@@ -16,12 +16,8 @@
 
 (defvar ruby-backend 'robe
   "Defines the backend for IDE features, defaulting to robe.
-<<<<<<< HEAD
 Possible values are `robe', and `lsp'.
 If `nil' then `robe' is the default backend unless `lsp' layer is used.")
-=======
-Possible values are `robe', and `lsp'.")
->>>>>>> Adding Ruby LSP Backend and DAP support
 
 (defvar ruby-enable-enh-ruby-mode nil
   "If non-nil, use `enh-ruby-mode' package instead of the built-in Ruby Mode.")

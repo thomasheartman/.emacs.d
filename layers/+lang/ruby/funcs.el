@@ -12,7 +12,6 @@
 
 ;; backend
 
-<<<<<<< HEAD
 (defun spacemacs//ruby-backend ()
   "Returns selected backend."
   (if ruby-backend
@@ -25,18 +24,11 @@
   "Conditionally configure Ruby backend"
   (spacemacs//ruby-setup-version-manager)
   (pcase (spacemacs//ruby-backend)
-=======
-(defun spacemacs//ruby-setup-backend ()
-  "Conditionally configure Ruby backend"
-  (spacemacs//ruby-setup-version-manager)
-  (pcase ruby-backend
->>>>>>> Adding Ruby LSP Backend and DAP support
     (`lsp (spacemacs//ruby-setup-lsp))
     (`robe (spacemacs//ruby-setup-robe))))
 
 (defun spacemacs//ruby-setup-company ()
   "Configure backend company"
-<<<<<<< HEAD
   (pcase (spacemacs//ruby-backend)
     (`robe (spacemacs//ruby-setup-robe-company))
     (`lsp nil))) ;; Company is automatically set up by lsp
@@ -47,12 +39,6 @@
   (pcase (spacemacs//ruby-backend)
     (`lsp (spacemacs//ruby-setup-lsp-dap))))
 
-=======
-  (pcase ruby-backend
-    (`robe (spacemacs//ruby-setup-robe-company))
-    (`lsp nil))) ;; Company is automatically set up by lsp
-
->>>>>>> Adding Ruby LSP Backend and DAP support
 
 ;; lsp
 
@@ -60,20 +46,11 @@
   "Setup Ruby lsp."
   (if (configuration-layer/layer-used-p 'lsp)
       (lsp)
-<<<<<<< HEAD
     (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
 
 (defun spacemacs//ruby-setup-lsp-dap ()
   "Setup DAP integration."
   (require 'dap-ruby))
-=======
-    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile."))
-  (if (configuration-layer/layer-used-p 'dap)
-      (progn
-        (require 'dap-ruby)
-        (spacemacs/dap-bind-keys-for-mode 'ruby-mode))
-    (message "`dap' layer is not installed, please add `dap' layer to your dotfile.")))
->>>>>>> Adding Ruby LSP Backend and DAP support
 
 
 ;; robe
