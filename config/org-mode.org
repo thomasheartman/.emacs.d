@@ -12,7 +12,7 @@
              ("p" "Post" entry (file+headline "~/projects/blog/notes.org" "Posts")
               "* IDEA %^{header}\n%U%i\n%?" :empty-lines 1)))
    #+end_src
-** Key bindings
+** Key bindings                                                  :keybinding:
    A lot of Spacemacs' key bindings are really helpful, but in Org mode, I want ~C-c C-w~ to be used for org-refile, and not for window management.
    #+begin_src emacs-lisp
      (evil-define-key '(hybrid visual normal insert) org-mode-map (kbd "C-c C-w") 'org-refile)
@@ -86,7 +86,7 @@
              (add-to-list 'org-capture-templates '("j" "Journal entry" entry (function org-journal-find-location)
                                                    "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
    #+end_src
-** Getting Things Done (GTD)
+** Getting Things Done (GTD)                                            :GTD:
    Because I am working on implementing the GTD methodology, I want to configure org mode to work with this as easily as possible. This section is based heavily on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][this blog post]] by Nicolas Petton over at [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Emacs Café]].
 
 *** Capture templates
