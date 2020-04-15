@@ -1,3 +1,5 @@
+#+TAGS: keybinding | { os : macos | linux } | GTD
+
 * Org mode configuration
   This file contains my org mode configuration as a literate file. It is imported and tangled by my emacs config file.
 ** Capture templates
