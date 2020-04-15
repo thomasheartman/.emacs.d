@@ -108,14 +108,6 @@
                                  ("~/gtd/tickler.org" :maxlevel . 2)))
     #+end_src
 
-*** Agenda files
-    We only want to show agenda items from the GTD files where actual items lie, so there's no some day / maybe list included.
-    #+begin_src emacs-lisp
-      (setq org-agenda-files '("~/gtd/inbox.org"
-                               "~/gtd/main.org"
-                               "~/gtd/tickler.org"))
-    #+end_src
-
 *** Tags
     I want to set up set of common tags. We'll define a group of mutually exclusive tags (prefixed with an '@') for /context/, and another set of tags for categories.
     #+begin_src emacs-lisp
@@ -168,4 +160,26 @@
     #+begin_src emacs-lisp
       (setq org-use-fast-tag-selection t)
       (setq org-fast-tag-selection-single-key t)
+    #+end_src
+** Agenda
+
+*** Agenda files                                                        :GTD:
+    We only want to show agenda items from the GTD files where actual items lie, so there's no some day / maybe list included.
+    #+begin_src emacs-lisp
+      (setq org-agenda-files '("~/gtd/inbox.org"
+                               "~/gtd/main.org"
+                               "~/gtd/tickler.org"))
+    #+end_src
+
+
+
+*** Custom commands
+    Let's create some custom commands to use with the agenda view:
+    #+begin_src emacs-lisp
+      (setq org-agenda-custom-commands
+            '(("w" "Work" tags-todo "work")
+              ("b" "Blog" tags-todo "blog")
+              ("e" "Emacs" tags-todo "emacs")
+              ("o" "Org" tags-todo "org")
+              ("g" "GTD" tags-todo "GAD")))
     #+end_src
