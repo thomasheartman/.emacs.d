@@ -183,3 +183,9 @@
               ("o" "Org" tags-todo "org")
               ("g" "GTD" tags-todo "GAD")))
     #+end_src
+
+** Other settings
+   I like seeing symbols in my buffer, rather than LaTeX commands. This makes '\alpha + \pi' look like 'α + π' and also displays sub- and superscripts properly.
+   #+begin_src emacs-lisp
+     (setq org-pretty-entities t)
+   #+end_src
