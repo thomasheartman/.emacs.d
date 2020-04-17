@@ -194,3 +194,20 @@
    #+begin_src emacs-lisp
      (setq org-footnote-auto-adjust t)
    #+end_src
+
+* Additional key bindings                                        :keybinding:
+  In addition to package-specific keys, I also want to add certain other bindings.
+
+** Norwegian symbols for linux                                        :linux:
+   Compared to the English alphabet, Norwegian has three extra vowels: æ, ø, and å. These are not normally accessible from a US keyboard, but emacs lets us create our own mappings. These mappings map to how macOS does it (for better unification of my keyboard layouts. However, we also define an extra mapping for æ, because using ~s-e~ makes more sense than ~s-'~.
+   #+begin_src emacs-lisp
+     (when (string= system-type "gnu/linux")
+       (define-key key-translation-map (kbd "s-O") (kbd "Ø"))
+       (define-key key-translation-map (kbd "s-o") (kbd "ø"))
+       (define-key key-translation-map (kbd "s-A") (kbd "Å"))
+       (define-key key-translation-map (kbd "s-a") (kbd "å"))
+       (define-key key-translation-map (kbd "s-\"") (kbd "Æ"))
+       (define-key key-translation-map (kbd "s-'") (kbd "æ"))
+       (define-key key-translation-map (kbd "s-E") (kbd "Æ"))
+       (define-key key-translation-map (kbd "s-e") (kbd "æ")))
+   #+end_src
