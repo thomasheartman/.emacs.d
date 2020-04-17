@@ -181,7 +181,7 @@
               ("b" "Blog" tags-todo "blog")
               ("e" "Emacs" tags-todo "emacs")
               ("o" "Org" tags-todo "org")
-              ("g" "GTD" tags-todo "GAD")))
+              ("g" "GTD" tags-todo "GTD")))
     #+end_src
 
 ** Other settings
