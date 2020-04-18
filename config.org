@@ -184,6 +184,21 @@
               ("g" "GTD" tags-todo "GTD")))
     #+end_src
 
+** Org-ref
+   I use [[https://github.com/jkitchin/org-ref][org-ref]] for managing bibliographies and citations.
+
+   #+begin_src emacs-lisp
+     (use-package org-ref
+       :after org
+       :init (setq reftex-default-bibliography'("~/gtd/bibliography/references.bib")
+                   org-ref-bibliography-notes "~/gtd/bibliography/notes.org"
+                   org-ref-default-bibliography'("~/gtd/bibliography/references.bib")
+                   org-ref-pdf-directory "~/gtd/bibliography/bibtex-pdfs/"
+                   bibtex-completion-bibliography "~/gtd/bibliography/references.bib"
+                   bibtex-completion-library-path "~/gtd/bibliography/bibtex-pdfs"
+                   bibtex-completion-notes-path "~/gtd/bibliography/helm-bibtext-notes"))
+   #+end_src
+
 ** Other settings
    I like seeing symbols in my buffer, rather than LaTeX commands. This makes '\alpha + \pi' look like 'α + π' and also displays sub- and superscripts properly.
    #+begin_src emacs-lisp
