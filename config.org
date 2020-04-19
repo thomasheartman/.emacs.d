@@ -226,3 +226,11 @@
        (define-key key-translation-map (kbd "s-E") (kbd "Æ"))
        (define-key key-translation-map (kbd "s-e") (kbd "æ")))
    #+end_src
+** Execute region in shell
+   Sometimes it's handy to be able to execute whatever's in the region in a shell. This function does that:
+   #+begin_src emacs-lisp
+     (defun shell-region (start end)
+       "Evaluate region in your shell"
+       (interactive "r")
+       (shell-command (buffer-substring-no-properties start end)))
+   #+end_src
