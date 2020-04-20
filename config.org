@@ -247,3 +247,12 @@
        (interactive "r")
        (shell-command (buffer-substring-no-properties start end)))
    #+end_src
+
+* direnv
+direnv is a very handy tool that I use to load dynamic environments from a file's directory into Emacs. It's especially useful when used in combination with nix-shells. We want to enable this globally and add some key bindings for it.
+#+begin_src emacs-lisp
+  (use-package direnv
+    :config (direnv-mode)
+    :init (define-key global-map (kbd "C-c d u") 'direnv-update-environment)
+          (define-key global-map (kbd "C-c d a") 'direnv-allow))
+#+end_src
