@@ -101,9 +101,10 @@
     #+end_src
 
 *** Refile targets
-    Configure refile targets for when moving items from the inbox to their correct positions
+    Configure refile targets for when moving items from the inbox to their correct positions. The ~(nil . N)~ entry means that the current file will also be searched for refile targets.
     #+begin_src emacs-lisp
-      (setq org-refile-targets '(("~/gtd/main.org" :maxlevel . 3)
+      (setq org-refile-targets '((nil :maxlevel . 5)
+                                 ("~/gtd/main.org" :maxlevel . 3)
                                  ("~/gtd/someday-maybe.org" :level . 1)
                                  ("~/gtd/tickler.org" :maxlevel . 2)))
     #+end_src
