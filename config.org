@@ -268,3 +268,13 @@ direnv is a very handy tool that I use to load dynamic environments from a file'
     :init (define-key global-map (kbd "C-c d u") 'direnv-update-environment)
           (define-key global-map (kbd "C-c d a") 'direnv-allow))
 #+end_src
+
+* BibTeX mode
+  I use BibTeX mode to manage my references. BibTeX mode doesn't automatically enable ~electric-pair-mode~, so let's get that on the go:
+ #+begin_src emacs-lisp
+   (defun my-bibtex-mode-hook ()
+     (interactive)
+     (electric-pair-local-mode))
+
+   (add-hook 'bibtex-mode-hook 'my-bibtex-mode-hook)
+  #+end_src
