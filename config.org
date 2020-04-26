@@ -1,280 +1,284 @@
 #+TAGS: keybinding | { os : macos | linux } | GTD
 
-* Org mode configuration
-  This file contains my org mode configuration as a literate file. It is imported and tangled by my emacs config file.
-** Capture templates
-   In addition to what goes in other sections, we want to add some capture templates for general use. Note that this section is placed first so that ~org-capture-templates~ is non-nil when we add things to it later.
-*** TODO Make the order of org-capture-template config not matter
-   #+begin_src emacs-lisp
-     (setq org-capture-templates
-           '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
-              "* TODO %?\n %i\n %a")
-             ("p" "Post" entry (file+headline "~/projects/blog/notes.org" "Posts")
-              "* IDEA %^{header}\n%U%i\n%?" :empty-lines 1)))
-   #+end_src
-** Key bindings                                                  :keybinding:
-   A lot of Spacemacs' key bindings are really helpful, but in Org mode, I want ~C-c C-w~ to be used for org-refile, and not for window management.
-   #+begin_src emacs-lisp
-     (evil-define-key '(hybrid visual normal insert) org-mode-map (kbd "C-c C-w") 'org-refile)
-   #+end_src
-** Org journal
-   I use [[https://github.com/bastibe/org-journal][org-journal]] for keeping track of what I do during my days (primarily for work). It's mostly used in conjunction with org-capture, so we'll also set up the capture template for that.
+* Thomas Heartman's Emacs config
+  This file contains my (additional) Emacs configuration as a literate file. It is imported and tangled by my emacs config file.
 
-   First, let's define a few helper functions to make it easier to work with org-journal:
-   #+begin_src emacs-lisp
-      (defun kill-buffer-and-window-unconditionally ()
-        "Kill the current buffer and window regardless of modified state."
-        (interactive)
-        (set-buffer-modified-p nil)
-        (kill-buffer-and-window))
-      (defun org-journal-save-entry-and-exit()
-        "Simple convenience function.
-      Saves the buffer of the current day's entry and kills the window
-      Similar to org-capture like behavior"
-        (interactive)
-        (save-buffer)
-        (kill-buffer-and-window))
-   #+end_src
+  At the time of writing, this is only part of my configuration. The rest is located in my ~.spacemacs~ file. As much as is sensible, however, new configuration will happen here, and the plan is to eventually move away from Spacemacs completely.
 
-   Next, let's configure org-journal once it's loaded. We're going to:
-   - Bind the functions we created earlier
-   - Define a function for finding where to add a new entry to the journal
-   - Create custom headers that will get auto-inserted into new journal files to have a consistent environment
-   - Add a capture template for journal entries
-
-   #+begin_src emacs-lisp
-     (with-eval-after-load 'org-journal
-             (define-key org-journal-mode-map (kbd "C-x C-s") 'org-journal-save-entry-and-exit)
-             (define-key org-journal-mode-map (kbd "C-c C-k") 'kill-buffer-and-window-unconditionally)
-             (defun org-journal-find-location ()
-               ;; Open today's journal, but specify a non-nil prefix argument in order to
-               ;; inhibit inserting the heading; org-capture will insert the heading.
-               (org-journal-new-entry t)
-               ;; Position point on the journal's top-level heading so that org-capture
-               ;; will add the new entry as a child entry.
-               (goto-char (point-min))
-               ;; If the first line is not a heading, move to the first heading in the file.
-               (call-interactively 'org-forward-heading-same-level)
-               ;; In case the first line was a heading, move back to the previous top-level heading.
-               ;; If we're on the first top-level heading, this function does nothing.
-               (call-interactively 'org-backward-heading-same-level))
-
-
-             (defun create-todo-item (item)
-               (format "%s(%s)" (car item) (cdr item)))
-
-             (defun create-todo-match-string (todo) (format "TODO=\"%s\"" todo))
-
-             (let ((todo-items '(("TODO". "t")
-                                 ("BLOCKED" . "b@")
-                                 ("REVIEW". "r")))
-                   (done-items '(("DONE" . "d"))))
-               (setq
-                org-journal-carryover-items
-                (mapconcat
-                 (lambda (x) (create-todo-match-string (car x)))
-                 todo-items
-                 "|")
-
-                org-journal-file-header
-                (concat
-                 (format "#+TODO: %s | %s"
-                         (mapconcat 'create-todo-item todo-items " ")
-                         (mapconcat 'create-todo-item done-items " "))
-                 "\n"
-                 "#+PROPERTY: LOG_INTO_DRAWER t")))
-             (add-to-list 'org-capture-templates '("j" "Journal entry" entry (function org-journal-find-location)
-                                                   "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
-   #+end_src
-** Getting Things Done (GTD)                                            :GTD:
-   Because I am working on implementing the GTD methodology, I want to configure org mode to work with this as easily as possible. This section is based heavily on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][this blog post]] by Nicolas Petton over at [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Emacs Café]].
-
+** Org mode configuration
 *** Capture templates
-    Configure capture templates to use for adding new entries to the inbox.
+    In addition to what goes in other sections, we want to add some capture templates for general use. Note that this section is placed first so that ~org-capture-templates~ is non-nil when we add things to it later.
+**** TODO Make the order of org-capture-template config not matter
     #+begin_src emacs-lisp
-      (add-to-list 'org-capture-templates
-                   '("i" "Inbox (GTD)" entry (file "~/gtd/inbox.org")
-                     "* %^{title}\n  :LOGBOOK:\n  - Created %U\n  :END:\n  %i%?"  :empty-lines 1))
-      (add-to-list 'org-capture-templates
-                   '("p" "Project (GTD)" entry (file+headline "~/gtd/main.org" "Tasks")
-                     "* %^{title} [/]\n  :LOGBOOK:\n  - Created %U\n  :END:\n  %i%?"  :empty-lines 1))
+      (setq org-capture-templates
+            '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+               "* TODO %?\n %i\n %a")
+              ("p" "Post" entry (file+headline "~/projects/blog/notes.org" "Posts")
+               "* IDEA %^{header}\n%U%i\n%?" :empty-lines 1)))
+    #+end_src
+*** Key bindings                                                 :keybinding:
+    A lot of Spacemacs' key bindings are really helpful, but in Org mode, I want ~C-c C-w~ to be used for org-refile, and not for window management.
+    #+begin_src emacs-lisp
+      (evil-define-key '(hybrid visual normal insert) org-mode-map (kbd "C-c C-w") 'org-refile)
+    #+end_src
+*** Org journal
+    I use [[https://github.com/bastibe/org-journal][org-journal]] for keeping track of what I do during my days (primarily for work). It's mostly used in conjunction with org-capture, so we'll also set up the capture template for that.
+
+    First, let's define a few helper functions to make it easier to work with org-journal:
+    #+begin_src emacs-lisp
+       (defun kill-buffer-and-window-unconditionally ()
+         "Kill the current buffer and window regardless of modified state."
+         (interactive)
+         (set-buffer-modified-p nil)
+         (kill-buffer-and-window))
+       (defun org-journal-save-entry-and-exit()
+         "Simple convenience function.
+       Saves the buffer of the current day's entry and kills the window
+       Similar to org-capture like behavior"
+         (interactive)
+         (save-buffer)
+         (kill-buffer-and-window))
     #+end_src
 
-*** Refile targets
-    Configure refile targets for when moving items from the inbox to their correct positions. The ~(nil :maxlevel . N)~ entry means that the current file will also be searched for refile targets, and the ~(org-buffer-list :maxlevel . N)~ entry means that any org buffer is also used for targets.
+    Next, let's configure org-journal once it's loaded. We're going to:
+    - Bind the functions we created earlier
+    - Define a function for finding where to add a new entry to the journal
+    - Create custom headers that will get auto-inserted into new journal files to have a consistent environment
+    - Add a capture template for journal entries
+
     #+begin_src emacs-lisp
-      (setq org-refile-targets '((nil :maxlevel . 5)
-                                 (org-buffer-list :maxlevel . 2)
-                                 ("~/gtd/main.org" :maxlevel . 3)
-                                 ("~/gtd/someday-maybe.org" :level . 1)
-                                 ("~/gtd/tickler.org" :maxlevel . 2)))
+      (with-eval-after-load 'org-journal
+              (define-key org-journal-mode-map (kbd "C-x C-s") 'org-journal-save-entry-and-exit)
+              (define-key org-journal-mode-map (kbd "C-c C-k") 'kill-buffer-and-window-unconditionally)
+              (defun org-journal-find-location ()
+                ;; Open today's journal, but specify a non-nil prefix argument in order to
+                ;; inhibit inserting the heading; org-capture will insert the heading.
+                (org-journal-new-entry t)
+                ;; Position point on the journal's top-level heading so that org-capture
+                ;; will add the new entry as a child entry.
+                (goto-char (point-min))
+                ;; If the first line is not a heading, move to the first heading in the file.
+                (call-interactively 'org-forward-heading-same-level)
+                ;; In case the first line was a heading, move back to the previous top-level heading.
+                ;; If we're on the first top-level heading, this function does nothing.
+                (call-interactively 'org-backward-heading-same-level))
+
+
+              (defun create-todo-item (item)
+                (format "%s(%s)" (car item) (cdr item)))
+
+              (defun create-todo-match-string (todo) (format "TODO=\"%s\"" todo))
+
+              (let ((todo-items '(("TODO". "t")
+                                  ("BLOCKED" . "b@")
+                                  ("REVIEW". "r")))
+                    (done-items '(("DONE" . "d"))))
+                (setq
+                 org-journal-carryover-items
+                 (mapconcat
+                  (lambda (x) (create-todo-match-string (car x)))
+                  todo-items
+                  "|")
+
+                 org-journal-file-header
+                 (concat
+                  (format "#+TODO: %s | %s"
+                          (mapconcat 'create-todo-item todo-items " ")
+                          (mapconcat 'create-todo-item done-items " "))
+                  "\n"
+                  "#+PROPERTY: LOG_INTO_DRAWER t")))
+              (add-to-list 'org-capture-templates '("j" "Journal entry" entry (function org-journal-find-location)
+                                                    "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
+    #+end_src
+*** Getting Things Done (GTD)                                           :GTD:
+    Because I am working on implementing the GTD methodology, I want to configure org mode to work with this as easily as possible. This section is based heavily on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][this blog post]] by Nicolas Petton over at [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Emacs Café]].
+
+**** Capture templates
+     Configure capture templates to use for adding new entries to the inbox.
+     #+begin_src emacs-lisp
+       (add-to-list 'org-capture-templates
+                    '("i" "Inbox (GTD)" entry (file "~/gtd/inbox.org")
+                      "* %^{title}\n  :LOGBOOK:\n  - Created %U\n  :END:\n  %i%?"  :empty-lines 1))
+       (add-to-list 'org-capture-templates
+                    '("p" "Project (GTD)" entry (file+headline "~/gtd/main.org" "Tasks")
+                      "* %^{title} [/]\n  :LOGBOOK:\n  - Created %U\n  :END:\n  %i%?"  :empty-lines 1))
+     #+end_src
+
+**** Refile targets
+     Configure refile targets for when moving items from the inbox to their correct positions. The ~(nil :maxlevel . N)~ entry means that the current file will also be searched for refile targets, and the ~(org-buffer-list :maxlevel . N)~ entry means that any org buffer is also used for targets.
+     #+begin_src emacs-lisp
+       (setq org-refile-targets '((nil :maxlevel . 5)
+                                  (org-buffer-list :maxlevel . 2)
+                                  ("~/gtd/main.org" :maxlevel . 3)
+                                  ("~/gtd/someday-maybe.org" :level . 1)
+                                  ("~/gtd/tickler.org" :maxlevel . 2)))
+     #+end_src
+
+**** Tags
+     I want to set up set of common tags. We'll define a group of mutually exclusive tags (prefixed with an '@') for /context/, and another set of tags for categories.
+     #+begin_src emacs-lisp
+       (setq org-tag-alist '((:startgroup)
+                             ("@errand" . ?e)
+                             ("@office" . ?o)
+                             ("@home" . ?h)
+                             ("@computer" . ?c)
+                             ("@phone" . ?9)
+                             (:endgroup)
+                             (:newline)
+                             (:startgroup)
+                             ("fitness" . ?f)
+                             (:grouptags)
+                             (:startgroup)
+                             ("LesMills" . ?l)
+                             (:grouptags)
+                             ("SHBAM" . ?S)
+                             ("BODYATTACK" . ?A)
+                             ("BODYCOMBAT" . ?C)
+                             ("BODYPUMP" .?P)
+                             (:endgroup)
+                             (:endgroup)
+                             (:startgroup)
+                             ("website" . ?s)
+                             (:grouptags)
+                             ("blog" . ?b)
+                             (:endgroup)
+                             (:startgroup)
+                             ("work" . ?w)
+                             (:grouptags)
+                             ("intility" . ?i)
+                             (:endgroup)
+                             (:startgroup)
+                             ("home" . ?H)
+                             (:grouptags)
+                             ("clothing")
+                             (:endgroup)
+                             ("finance" . ?F)
+                             ("personal" . ?p)
+                             ("design" . ?D)
+                             (:startgroup)
+                             ("review" . ?r)
+                             (:grouptags)
+                             ("watch")
+                             ("read")
+                             ("listen")
+                             (:endgroup)
+                             (:startgrouptag)
+                             ("dev" . ?d)
+                             (:grouptags)
+                             ("kubernetes" . ?8)
+                             ("language" . ?L)
+                             (:endgrouptag)
+                             ("GTD" . ?g)
+                             ("productivity")))
+     #+end_src
+
+     I also want to enable setting tags with a single press and without a pop-up menu:
+     #+begin_src emacs-lisp
+       (setq org-use-fast-tag-selection t)
+       (setq org-fast-tag-selection-single-key t)
+     #+end_src
+*** Agenda
+
+**** Agenda files                                                       :GTD:
+     We only want to show agenda items from the GTD files where actual items lie, so there's no some day / maybe list included.
+     #+begin_src emacs-lisp
+       (setq org-agenda-files '("~/gtd/inbox.org"
+                                "~/gtd/main.org"
+                                "~/gtd/tickler.org"))
+     #+end_src
+
+
+
+**** Custom commands
+     Let's create some custom commands to use with the agenda view:
+     #+begin_src emacs-lisp
+       (setq org-agenda-custom-commands
+             '(("w" "Work" tags-todo "work")
+               ("b" "Blog" tags-todo "blog")
+               ("e" "Emacs" tags-todo "emacs")
+               ("o" "Org" tags-todo "org")
+               ("g" "GTD" tags-todo "GTD")))
+     #+end_src
+
+*** Org-ref
+    I use [[https://github.com/jkitchin/org-ref][org-ref]] for managing bibliographies and citations.
+
+    #+begin_src emacs-lisp
+      (use-package org-ref
+        :after org
+        :init (setq reftex-default-bibliography'("~/gtd/bibliography/references.bib")
+                    org-ref-bibliography-notes "~/gtd/bibliography/notes.org"
+                    org-ref-default-bibliography'("~/gtd/bibliography/references.bib")
+                    org-ref-pdf-directory "~/gtd/bibliography/bibtex-pdfs/"
+                    bibtex-completion-bibliography "~/gtd/bibliography/references.bib"
+                    bibtex-completion-library-path "~/gtd/bibliography/bibtex-pdfs"
+                    bibtex-completion-notes-path "~/gtd/bibliography/helm-bibtext-notes"))
     #+end_src
 
-*** Tags
-    I want to set up set of common tags. We'll define a group of mutually exclusive tags (prefixed with an '@') for /context/, and another set of tags for categories.
+*** Other settings
+    I like seeing symbols in my buffer, rather than LaTeX commands. This makes '\alpha + \pi' look like 'α + π' and also displays sub- and superscripts properly.
     #+begin_src emacs-lisp
-      (setq org-tag-alist '((:startgroup)
-                            ("@errand" . ?e)
-                            ("@office" . ?o)
-                            ("@home" . ?h)
-                            ("@computer" . ?c)
-                            ("@phone" . ?9)
-                            (:endgroup)
-                            (:newline)
-                            (:startgroup)
-                            ("fitness" . ?f)
-                            (:grouptags)
-                            (:startgroup)
-                            ("LesMills" . ?l)
-                            (:grouptags)
-                            ("SHBAM" . ?S)
-                            ("BODYATTACK" . ?A)
-                            ("BODYCOMBAT" . ?C)
-                            ("BODYPUMP" .?P)
-                            (:endgroup)
-                            (:endgroup)
-                            (:startgroup)
-                            ("website" . ?s)
-                            (:grouptags)
-                            ("blog" . ?b)
-                            (:endgroup)
-                            (:startgroup)
-                            ("work" . ?w)
-                            (:grouptags)
-                            ("intility" . ?i)
-                            (:endgroup)
-                            (:startgroup)
-                            ("home" . ?H)
-                            (:grouptags)
-                            ("clothing")
-                            (:endgroup)
-                            ("finance" . ?F)
-                            ("personal" . ?p)
-                            ("design" . ?D)
-                            (:startgroup)
-                            ("review" . ?r)
-                            (:grouptags)
-                            ("watch")
-                            ("read")
-                            ("listen")
-                            (:endgroup)
-                            (:startgrouptag)
-                            ("dev" . ?d)
-                            (:grouptags)
-                            ("kubernetes" . ?8)
-                            ("language" . ?L)
-                            (:endgrouptag)
-                            ("GTD" . ?g)
-                            ("productivity")))
+      (setq org-pretty-entities t)
     #+end_src
 
-    I also want to enable setting tags with a single press and without a pop-up menu:
+    I also want my footnotes to be automatically sorted and renumbered whenever I insert a new one.
     #+begin_src emacs-lisp
-      (setq org-use-fast-tag-selection t)
-      (setq org-fast-tag-selection-single-key t)
-    #+end_src
-** Agenda
-
-*** Agenda files                                                        :GTD:
-    We only want to show agenda items from the GTD files where actual items lie, so there's no some day / maybe list included.
-    #+begin_src emacs-lisp
-      (setq org-agenda-files '("~/gtd/inbox.org"
-                               "~/gtd/main.org"
-                               "~/gtd/tickler.org"))
+      (setq org-footnote-auto-adjust t)
     #+end_src
 
+** Additional key bindings                                       :keybinding:
+   In addition to package-specific keys, I also want to add certain other bindings.
 
-
-*** Custom commands
-    Let's create some custom commands to use with the agenda view:
+*** Norwegian symbols for linux                                       :linux:
+    Compared to the English alphabet, Norwegian has three extra vowels: æ, ø, and å. These are not normally accessible from a US keyboard, but emacs lets us create our own mappings. These mappings map to how macOS does it (for better unification of my keyboard layouts. However, we also define an extra mapping for æ, because using ~s-e~ makes more sense than ~s-'~.
     #+begin_src emacs-lisp
-      (setq org-agenda-custom-commands
-            '(("w" "Work" tags-todo "work")
-              ("b" "Blog" tags-todo "blog")
-              ("e" "Emacs" tags-todo "emacs")
-              ("o" "Org" tags-todo "org")
-              ("g" "GTD" tags-todo "GTD")))
+      (when (string= system-type "gnu/linux")
+        (define-key key-translation-map (kbd "s-O") (kbd "Ø"))
+        (define-key key-translation-map (kbd "s-o") (kbd "ø"))
+        (define-key key-translation-map (kbd "s-A") (kbd "Å"))
+        (define-key key-translation-map (kbd "s-a") (kbd "å"))
+        (define-key key-translation-map (kbd "s-\"") (kbd "Æ"))
+        (define-key key-translation-map (kbd "s-'") (kbd "æ"))
+        (define-key key-translation-map (kbd "s-E") (kbd "Æ"))
+        (define-key key-translation-map (kbd "s-e") (kbd "æ")))
     #+end_src
 
-** Org-ref
-   I use [[https://github.com/jkitchin/org-ref][org-ref]] for managing bibliographies and citations.
+*** TODO Removing ~suspend-frame~
+    # TODO: find out how to remove this command if it exists, rather than unsetting the key
+    # In the event that this is bound to something else, I don't want to unmap that.
 
-   #+begin_src emacs-lisp
-     (use-package org-ref
-       :after org
-       :init (setq reftex-default-bibliography'("~/gtd/bibliography/references.bib")
-                   org-ref-bibliography-notes "~/gtd/bibliography/notes.org"
-                   org-ref-default-bibliography'("~/gtd/bibliography/references.bib")
-                   org-ref-pdf-directory "~/gtd/bibliography/bibtex-pdfs/"
-                   bibtex-completion-bibliography "~/gtd/bibliography/references.bib"
-                   bibtex-completion-library-path "~/gtd/bibliography/bibtex-pdfs"
-                   bibtex-completion-notes-path "~/gtd/bibliography/helm-bibtext-notes"))
-   #+end_src
+    I find the ~suspend-frame~ key binding to be rather annoying, especially because I use Emacs as a window manager through EXWM, which means that if I trigger it accidentally, then the entire frame freezes, and I can't do anything about it. As such, I want to remove the binding for ~suspend-frame~.
+    #+begin_src emacs-lisp
+      (global-unset-key (kbd "C-z"))
+      (global-unset-key (kbd "C-x C-z"))
+    #+end_src
+** Additional functionality
+   This sections contains extra functionality that isn't easily put elsewhere.
 
-** Other settings
-   I like seeing symbols in my buffer, rather than LaTeX commands. This makes '\alpha + \pi' look like 'α + π' and also displays sub- and superscripts properly.
-   #+begin_src emacs-lisp
-     (setq org-pretty-entities t)
-   #+end_src
+*** Execute region in shell
+    Sometimes it's handy to be able to execute whatever's in the region in a shell. This function does that:
+    #+begin_src emacs-lisp
+      (defun shell-region (start end)
+        "Evaluate region in your shell"
+        (interactive "r")
+        (shell-command (buffer-substring-no-properties start end)))
+    #+end_src
 
-   I also want my footnotes to be automatically sorted and renumbered whenever I insert a new one.
-   #+begin_src emacs-lisp
-     (setq org-footnote-auto-adjust t)
-   #+end_src
-
-* Additional key bindings                                        :keybinding:
-  In addition to package-specific keys, I also want to add certain other bindings.
-
-** Norwegian symbols for linux                                        :linux:
-   Compared to the English alphabet, Norwegian has three extra vowels: æ, ø, and å. These are not normally accessible from a US keyboard, but emacs lets us create our own mappings. These mappings map to how macOS does it (for better unification of my keyboard layouts. However, we also define an extra mapping for æ, because using ~s-e~ makes more sense than ~s-'~.
-   #+begin_src emacs-lisp
-     (when (string= system-type "gnu/linux")
-       (define-key key-translation-map (kbd "s-O") (kbd "Ø"))
-       (define-key key-translation-map (kbd "s-o") (kbd "ø"))
-       (define-key key-translation-map (kbd "s-A") (kbd "Å"))
-       (define-key key-translation-map (kbd "s-a") (kbd "å"))
-       (define-key key-translation-map (kbd "s-\"") (kbd "Æ"))
-       (define-key key-translation-map (kbd "s-'") (kbd "æ"))
-       (define-key key-translation-map (kbd "s-E") (kbd "Æ"))
-       (define-key key-translation-map (kbd "s-e") (kbd "æ")))
-   #+end_src
-
-** TODO Removing ~suspend-frame~
-   # TODO: find out how to remove this command if it exists, rather than unsetting the key
-   # In the event that this is bound to something else, I don't want to unmap that.
-
-   I find the ~suspend-frame~ key binding to be rather annoying, especially because I use Emacs as a window manager through EXWM, which means that if I trigger it accidentally, then the entire frame freezes, and I can't do anything about it. As such, I want to remove the binding for ~suspend-frame~.
-   #+begin_src emacs-lisp
-     (global-unset-key (kbd "C-z"))
-     (global-unset-key (kbd "C-x C-z"))
-   #+end_src
-* Additional functionality
-  This sections contains extra functionality that isn't easily put elsewhere.
-
-** Execute region in shell
-   Sometimes it's handy to be able to execute whatever's in the region in a shell. This function does that:
-   #+begin_src emacs-lisp
-     (defun shell-region (start end)
-       "Evaluate region in your shell"
-       (interactive "r")
-       (shell-command (buffer-substring-no-properties start end)))
-   #+end_src
-
-* direnv
-direnv is a very handy tool that I use to load dynamic environments from a file's directory into Emacs. It's especially useful when used in combination with nix-shells. We want to enable this globally and add some key bindings for it.
-#+begin_src emacs-lisp
-  (use-package direnv
-    :config (direnv-mode)
-    :init (define-key global-map (kbd "C-c d u") 'direnv-update-environment)
-          (define-key global-map (kbd "C-c d a") 'direnv-allow))
-#+end_src
-
-* BibTeX mode
-  I use BibTeX mode to manage my references. BibTeX mode doesn't automatically enable ~electric-pair-mode~, so let's get that on the go:
+** direnv
+ direnv is a very handy tool that I use to load dynamic environments from a file's directory into Emacs. It's especially useful when used in combination with nix-shells. We want to enable this globally and add some key bindings for it.
  #+begin_src emacs-lisp
-   (defun my-bibtex-mode-hook ()
-     (interactive)
-     (electric-pair-local-mode))
+   (use-package direnv
+     :config (direnv-mode)
+     :init (define-key global-map (kbd "C-c d u") 'direnv-update-environment)
+           (define-key global-map (kbd "C-c d a") 'direnv-allow))
+ #+end_src
 
-   (add-hook 'bibtex-mode-hook 'my-bibtex-mode-hook)
-  #+end_src
+** BibTeX mode
+   I use BibTeX mode to manage my references. BibTeX mode doesn't automatically enable ~electric-pair-mode~, so let's get that on the go:
+  #+begin_src emacs-lisp
+    (defun my-bibtex-mode-hook ()
+      (interactive)
+      (electric-pair-local-mode))
+
+    (add-hook 'bibtex-mode-hook 'my-bibtex-mode-hook)
+   #+end_src
