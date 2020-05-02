@@ -291,3 +291,14 @@
 
     (add-hook 'bibtex-mode-hook 'my-bibtex-mode-hook)
    #+end_src
+
+** Rust
+   I use Rustic mode and Rust-Analyzer for working with Rust. As such, let's get it set up:
+   #+begin_src emacs-lisp
+     (use-package rustic-mode
+       :after lsp-mode
+       :init (setq rustic-lsp-server 'rust-analyzer
+                   rustic-format-on-save t)
+       (add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
+       (add-hook 'rustic-mode-hook #'lsp))
+   #+end_src
