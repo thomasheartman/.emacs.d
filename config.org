@@ -1,4 +1,6 @@
 #+TAGS: keybinding | { os : macos | linux } | GTD
+#+property: header-args :cache yes :results silent :tangle yes :comments both
+
 
 * Thomas Heartman's Emacs config
   This file contains my (additional) Emacs configuration as a literate file. It is imported and tangled by my emacs config file.
