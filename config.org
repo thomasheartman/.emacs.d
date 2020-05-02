@@ -293,10 +293,18 @@
    #+end_src
 
 ** Rust
-   I use Rustic mode and Rust-Analyzer for working with Rust. As such, let's get it set up:
+   I use Rustic mode and Rust-Analyzer for working with Rust.
+
+   The configuration related to jump handlers is to work around a bug in Spacemacs that stopped lsp-mode from initializing properly, causing a broken state. Thanks to [[https://github.com/yyoncho][Ivan Yonchovski (@yyoncho)]] for help with getting it sorted out.
    #+begin_src emacs-lisp
      (use-package rustic
        :after lsp-mode
        :init (setq rustic-lsp-server 'rust-analyzer
-                   rustic-format-on-save t))
+                   rustic-format-on-save t)
+
+       ;; to work around spacemacs bug that caused lsp-mode to misbehave
+       (setq spacemacs-jump-handlers-rustic-mode nil)
+       (spacemacs//setup-lsp-jump-handler major-mode)
+       (spacemacs|define-jump-handlers 'rustic-mode 'lsp-find-definition))
+
    #+end_src
