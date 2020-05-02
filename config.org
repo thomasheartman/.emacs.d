@@ -295,7 +295,7 @@
 ** Rust
    I use Rustic mode and Rust-Analyzer for working with Rust. As such, let's get it set up:
    #+begin_src emacs-lisp
-     (use-package rustic-mode
+     (use-package rustic
        :after lsp-mode
        :init (setq rustic-lsp-server 'rust-analyzer
                    rustic-format-on-save t)
