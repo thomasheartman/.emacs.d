@@ -179,6 +179,13 @@
        (setq org-use-fast-tag-selection t)
        (setq org-fast-tag-selection-single-key t)
      #+end_src
+**** todo keywords
+     Here's the set of keywords I use for tracking states for my list items:
+     #+begin_src emacs-lisp
+       (setq org-todo-keywords
+             '((sequence "TODO(t!)" "NEXT(n!)" "WAITING(w@)" "|" "DONE(d!)" "CANCELED(c!)")))
+     #+end_src
+
 *** Agenda
 
 **** Agenda files                                                       :GTD:
