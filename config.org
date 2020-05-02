@@ -298,7 +298,5 @@
      (use-package rustic
        :after lsp-mode
        :init (setq rustic-lsp-server 'rust-analyzer
-                   rustic-format-on-save t)
-       (add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
-       (add-hook 'rustic-mode-hook #'lsp))
+                   rustic-format-on-save t))
    #+end_src
