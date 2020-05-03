@@ -209,6 +209,14 @@
                ("g" "GTD" tags-todo "GTD")))
      #+end_src
 
+**** Weekly view
+     For the weekly view, instead of seeing the current week (Monday through Sunday), I prefer seeing the next ~n~ and the previous ~m~ days.
+     #+begin_src elisp
+       (setq org-agenda-start-on-weekday nil
+             org-agenda-span 10
+             org-agenda-start-day "-3d")
+     #+end_src
+
 *** Org-ref
     I use [[https://github.com/jkitchin/org-ref][org-ref]] for managing bibliographies and citations.
 
