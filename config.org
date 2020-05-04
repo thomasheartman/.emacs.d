@@ -317,3 +317,11 @@
        (spacemacs//setup-lsp-jump-handler major-mode)
        (spacemacs|define-jump-handlers 'rustic-mode 'lsp-find-definition))
    #+end_src
+
+** Mode line
+   Spaceline appears to be causing some perf issues for me (see [[https://github.com/domtronn/spaceline-all-the-icons.el/issues/55][this thread]] on GitHub about it). As such, we follow some advice found in that thread and disable certain functionality:
+   #+begin_src elisp
+     (spaceline-toggle-projectile-root-off)
+     (spaceline-toggle-all-the-icons-projectile-off)
+     (spaceline-toggle-all-the-icons-buffer-id-off)
+   #+end_src
