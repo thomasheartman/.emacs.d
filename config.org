@@ -7,6 +7,10 @@
 
   At the time of writing, this is only part of my configuration. The rest is located in my ~.spacemacs~ file. As much as is sensible, however, new configuration will happen here, and the plan is to eventually move away from Spacemacs completely.
 
+
+** A note on source blocks
+   Do *not* use ~elisp~ as the language for source blocks. Instead, use ~emacs-lisp~. ~babel-load-file~ does not tangle source blocks labeled with ~elisp~, but it does tangle the ~emacs-lisp~ blocks.
+
 ** Org mode configuration
 *** Capture templates
     In addition to what goes in other sections, we want to add some capture templates for general use. Note that this section is placed first so that ~org-capture-templates~ is non-nil when we add things to it later.
@@ -211,7 +215,7 @@
 
 **** Weekly view
      For the weekly view, instead of seeing the current week (Monday through Sunday), I prefer seeing the next ~n~ and the previous ~m~ days.
-     #+begin_src elisp
+     #+begin_src emacs-lisp
        (setq org-agenda-start-on-weekday nil
              org-agenda-span 10
              org-agenda-start-day "-3d")
@@ -320,8 +324,13 @@
 
 ** Mode line
    Spaceline appears to be causing some perf issues for me (see [[https://github.com/domtronn/spaceline-all-the-icons.el/issues/55][this thread]] on GitHub about it). As such, we follow some advice found in that thread and disable certain functionality:
-   #+begin_src elisp
+   #+begin_src emacs-lisp
      (spaceline-toggle-projectile-root-off)
      (spaceline-toggle-all-the-icons-projectile-off)
-     (spaceline-toggle-all-the-icons-buffer-id-off)
+   #+end_src
+
+** Helm
+   There [[https://github.com/syl20bnr/spacemacs/issues/13564][appears to be a bug with Helm's history]] that causes repeated history entries. To work around this, we ask it to delete duplicates:
+   #+begin_src emacs-lisp
+     (setq history-delete-duplicates t)
    #+end_src
