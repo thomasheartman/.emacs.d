@@ -1,5 +1,5 @@
 #+TAGS: keybinding | { os : macos | linux } | GTD
-#+property: header-args :cache yes :results silent :tangle yes :comments both
+#+property: header-args :results silent :tangle yes :comments both
 
 
 * Thomas Heartman's Emacs config
@@ -327,6 +327,12 @@
    #+begin_src emacs-lisp
      (spaceline-toggle-projectile-root-off)
      (spaceline-toggle-all-the-icons-projectile-off)
+   #+end_src
+
+   We can use ~mini-modeline~ to get some more screen space:
+   #+begin_src emacs-lisp
+     (use-package mini-modeline
+       :config (mini-modeline-mode t))
    #+end_src
 
 ** Helm
