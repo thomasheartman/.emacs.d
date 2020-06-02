@@ -255,6 +255,12 @@
       (setq org-footnote-auto-adjust t)
     #+end_src
 
+
+    Furthermore, I /always/ want to org to log into drawers, so let's set that too:
+    #+begin_src emacs-lisp
+      (setq org-log-into-drawer t)
+    #+end_src
+
 ** Additional key bindings                                       :keybinding:
    In addition to package-specific keys, I also want to add certain other bindings.
 
