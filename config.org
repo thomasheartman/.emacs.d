@@ -236,6 +236,14 @@
                     bibtex-completion-notes-path "~/gtd/bibliography/helm-bibtext-notes"))
     #+end_src
 
+*** Babel
+    In addition to the basic org-babel setup, we can add some extra packages to make it even smoother to work with.
+
+    One such package is [[https://github.com/zweifisch/ob-http][ob-http]], which allows you to make HTTP requests from org source blocks:
+    #+begin_src emacs-lisp
+      (add-to-list 'org-babel-load-languages '(http . t))
+    #+end_src
+
 *** Other settings
     I like seeing symbols in my buffer, rather than LaTeX commands. This makes '\alpha + \pi' look like 'α + π' and also displays sub- and superscripts properly.
     #+begin_src emacs-lisp
@@ -309,17 +317,17 @@
 
    The configuration related to jump handlers is to work around a bug in Spacemacs that stopped lsp-mode from initializing properly, causing a broken state. Thanks to [[https://github.com/yyoncho][Ivan Yonchovski (@yyoncho)]] for help with getting it sorted out.
    #+begin_src emacs-lisp
-     (use-package rustic
-       :ensure t
-       :after lsp-mode
-       :mode ("\\.rs\\'" . rustic-mode)
-       :init (setq rustic-lsp-server 'rust-analyzer
-                   rustic-format-on-save t)
+     ;; (use-package rustic
+     ;;   :ensure t
+     ;;   :after lsp-mode
+     ;;   :mode ("\\.rs\\'" . rustic-mode)
+     ;;   :init (setq rustic-lsp-server 'rust-analyzer
+     ;;               rustic-format-on-save t)
 
-       ;; to work around spacemacs bug that caused lsp-mode to misbehave
-       (setq spacemacs-jump-handlers-rustic-mode nil)
-       (spacemacs//setup-lsp-jump-handler major-mode)
-       (spacemacs|define-jump-handlers 'rustic-mode 'lsp-find-definition))
+     ;;   ;; to work around spacemacs bug that caused lsp-mode to misbehave
+     ;;   (setq spacemacs-jump-handlers-rustic-mode nil)
+     ;;   (spacemacs//setup-lsp-jump-handler major-mode)
+     ;;   (spacemacs|define-jump-handlers 'rustic-mode 'lsp-find-definition))
    #+end_src
 
 ** Mode line
