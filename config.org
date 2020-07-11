@@ -319,6 +319,12 @@
     (add-hook 'bibtex-mode-hook 'my-bibtex-mode-hook)
    #+end_src
 
+** notmuch (email)
+   To be able to send email with notmuch, we need to make sure that Emacs is
+   configured to use the application.
+   #+begin_src emacs-lisp
+     (setq message-send-mail-function 'message-send-mail-with-sendmail)
+   #+end_src
 ** Rust
    I use Rustic mode and Rust-Analyzer for working with Rust.
 
