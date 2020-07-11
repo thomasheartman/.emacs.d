@@ -241,7 +241,8 @@
 
     One such package is [[https://github.com/zweifisch/ob-http][ob-http]], which allows you to make HTTP requests from org source blocks:
     #+begin_src emacs-lisp
-      (add-to-list 'org-babel-load-languages '(http . t))
+      (use-package ob-http
+        :init (add-to-list 'org-babel-load-languages '(http . t)))
     #+end_src
 
 *** Other settings
