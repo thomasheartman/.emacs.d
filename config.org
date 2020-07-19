@@ -245,6 +245,12 @@
         :init (add-to-list 'org-babel-load-languages '(http . t)))
     #+end_src
 
+    Because I trust myself (somewhat foolishly perhaps) to only execute org code
+    blocks that I know to be safe, I don't want to be prompted when executing a code block:
+    #+begin_src emacs-lisp
+      (setq org-confirm-babel-evaluate nil)
+    #+end_src
+
 *** Other settings
     I like seeing symbols in my buffer, rather than LaTeX commands. This makes '\alpha + \pi' look like 'α + π' and also displays sub- and superscripts properly.
     #+begin_src emacs-lisp
