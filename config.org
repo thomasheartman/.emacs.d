@@ -331,6 +331,11 @@
    #+begin_src emacs-lisp
      (setq message-send-mail-function 'message-send-mail-with-sendmail)
    #+end_src
+   Furthermore, we want sent mail to not be tagged with 'inbox' and 'unread', but rather with 'sent'.
+   #+begin_src emacs-lisp
+     (setq notmuch-fcc-dirs "sent +sent -unread -inbox")
+   #+end_src
+
 ** Rust
    I use Rustic mode and Rust-Analyzer for working with Rust.
 
