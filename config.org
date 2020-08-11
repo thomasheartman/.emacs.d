@@ -285,14 +285,13 @@
         (define-key key-translation-map (kbd "s-e") (kbd "æ")))
     #+end_src
 
-*** TODO Removing ~suspend-frame~
-    # TODO: find out how to remove this command if it exists, rather than unsetting the key
-    # In the event that this is bound to something else, I don't want to unmap that.
-
+*** Removing ~suspend-frame~
     I find the ~suspend-frame~ key binding to be rather annoying, especially because I use Emacs as a window manager through EXWM, which means that if I trigger it accidentally, then the entire frame freezes, and I can't do anything about it. As such, I want to remove the binding for ~suspend-frame~.
     #+begin_src emacs-lisp
-      (global-unset-key (kbd "C-z"))
-      (global-unset-key (kbd "C-x C-z"))
+      (define-key (current-global-map) [remap suspend-frame]
+        (lambda ()
+          (interactive)
+          (message "This keybinding is disabled (was 'suspend-frame')")))
     #+end_src
 ** Additional functionality
    This sections contains extra functionality that isn't easily put elsewhere.
